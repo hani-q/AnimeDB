@@ -6,4 +6,5 @@
     <string name="tab_new_releases_title">New Releases</string>
     <string name="tab_watched_title">Watched</string>
     <string name="container_title">Cartoon Guide</string>
+    <string name="moviedb_api_url">http://api.themoviedb.org/3</string>
 </resources>

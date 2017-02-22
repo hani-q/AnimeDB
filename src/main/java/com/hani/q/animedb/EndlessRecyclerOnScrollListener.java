@@ -3,8 +3,6 @@ package com.hani.q.animedb;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 
 /**
  * Created by hani Q on 2/22/2017.

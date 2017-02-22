@@ -2,7 +2,6 @@ package com.hani.q.animedb;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,9 +60,7 @@ public class PopularFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState)
             {
-
                 FloatingActionButton fab = (FloatingActionButton) recyclerView.getRootView().findViewById(R.id.fab);
-
                 if(((GridLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition() ==0){
                     //Its at top ..
                     fab.hide();
@@ -71,19 +68,16 @@ public class PopularFragment extends Fragment {
                 else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     fab.show();
                 }
-
                 super.onScrollStateChanged(recyclerView, newState);
             }
-
         });
-
         return view;
     }
 
     private void getAnimeData (final int page) {
         Log.d(LOG_TAG, String.format("Loading Page: %d", page));
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://api.themoviedb.org/3")
+                .setEndpoint(getString(R.string.moviedb_api_url))
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade request) {
@@ -92,7 +86,7 @@ public class PopularFragment extends Fragment {
                         request.addEncodedQueryParam("page", String.valueOf(page));
                     }
                 })
-                .setLogLevel(RestAdapter.LogLevel.NONE)
+                .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .build();
 
         MovieApiService service = restAdapter.create(MovieApiService.class);
