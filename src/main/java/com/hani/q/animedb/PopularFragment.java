@@ -39,7 +39,13 @@ public class PopularFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new AnimeAdapter(getContext());
+        mAdapter = new AnimeAdapter(getContext(), new AnimeItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Log.d(LOG_TAG, "clicked position:" + position);
+                //TODO(Hani Q) Implement new Activity
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
         getAnimeData(page);
 

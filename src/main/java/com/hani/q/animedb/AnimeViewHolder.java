@@ -1,6 +1,7 @@
 package com.hani.q.animedb;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
  */
 
 public  class AnimeViewHolder extends RecyclerView.ViewHolder {
+    private static final String LOG_TAG = AnimeViewHolder.class.getSimpleName();
     public ImageView imageView;
     public TextView textView;
 
