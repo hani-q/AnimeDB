@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,6 +20,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
     private List<Anime> mAnimeList;
     private LayoutInflater mInflater;
     private Context mContext;
+    private final View.OnClickListener mOnClickListener = new AnimeViewClickListener();
 
     public AnimeAdapter (Context ctxt) {
         //setHasStableIds(true);
@@ -27,12 +29,17 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
         this.mAnimeList = new ArrayList<>();
     }
 
+    public Anime getItemfromAnimeList(int position) {
+        return this.mAnimeList.get(position);
+    }
+
     @Override
     public AnimeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.row_anime, parent, false);
         AnimeViewHolder viewHolder = new AnimeViewHolder(view);
         return viewHolder;
     }
+
 
     @Override
     public void onBindViewHolder(AnimeViewHolder holder, int position) {
@@ -62,5 +69,14 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
         notifyItemRangeInserted(count, animeList.size());
     }
 
-
+    private class AnimeViewClickListener extends View.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            Context mContext = view.getContext();
+            RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+            int itemPosition = mRecyclerView.getChildLayoutPosition(view);
+            Anime item = mAnimeList.get(itemPosition);
+            Toast.makeText(mContext, (CharSequence) item, Toast.LENGTH_LONG).show();
+        }
+    }
 }
