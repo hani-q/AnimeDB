@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +22,25 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter viewPagerAdapter;
 
     private static String LOG_TAG = MainActivity.class.getSimpleName();
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        //Set Picasso Global Settings
+        Picasso picasso = new Picasso.Builder(getApplicationContext()).build();
+        picasso.setIndicatorsEnabled(true);
+        picasso.setLoggingEnabled(true);
+
+        // set the global instance to use this Picasso object
+        // all following Picasso (with Picasso.with(Context context) requests will use this Picasso object
+        // you can only use the setSingletonInstance() method once!
+        try {
+            Picasso.setSingletonInstance(picasso);
+        } catch (IllegalStateException ignored) {
+            // Picasso instance was already set
+            // cannot set it after Picasso.with(Context) was already in use
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

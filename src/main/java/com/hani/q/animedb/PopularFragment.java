@@ -1,5 +1,6 @@
 package com.hani.q.animedb;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -33,17 +34,23 @@ public class PopularFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         super.onCreateView(inflater, container, savedInstanceState);
+
         View view = inflater.inflate(R.layout.fragment_popular, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new AnimeAdapter(getContext(), new AnimeItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
+                Anime anime = mAdapter.getItem(position);
                 Log.d(LOG_TAG, "clicked position:" + position);
                 //TODO(Hani Q) Implement new Activity
+                Intent detailIntent = new Intent(getContext(), DetailActivity.class);
+                detailIntent.putExtra("Anime", anime);
+                startActivity(detailIntent);
             }
         });
         mRecyclerView.setAdapter(mAdapter);
