@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="max_stars">5</integer>
+    <integer name="TMDB_poster_width">500</integer>
+    <integer name="TMDB_poster_height">750</integer>
+</resources>

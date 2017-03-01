@@ -1,8 +1,11 @@
 package com.hani.q.animedb;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,30 +13,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.*;
 
 /**
  * TODO(HaniQ): Adding a darn desctription
  */
 
 public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
+    private static final String LOG_TAG = AnimeViewHolder.class.getSimpleName();
     private List<Anime> mAnimeList;
     private LayoutInflater mInflater;
     private Context mContext;
     private AnimeItemClickListener listener;
+    int width, height;
 
-    public AnimeAdapter (Context ctxt, AnimeItemClickListener listener) {
-        //setHasStableIds(true);
-        this.mContext = ctxt;
+    public AnimeAdapter (Context mContext, AnimeItemClickListener listener) {
+
+        this.mContext = mContext;
         this.mInflater = LayoutInflater.from(this.mContext);
         this.mAnimeList = new ArrayList<>();
         this.listener = listener;
-
+        this.width = (int) round(mContext.getResources().getInteger(R.integer.TMDB_poster_width) * (0.65));
+        this.height = (int) round(mContext.getResources().getInteger(R.integer.TMDB_poster_height) * (0.65));
     }
 
     @Override
@@ -51,27 +59,46 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
 
     @Override
     public void onBindViewHolder(final AnimeViewHolder holder, int position) {
-        Anime anime = mAnimeList.get(position);
+        final Anime anime = mAnimeList.get(position);
         holder.textView.setText(anime.getTitle());
-
-        /*//TODO(HaniQ): Add PlaceHolder and Error Image
-        Picasso.with(this.mContext)
-                .load(anime.getPoster())
-                .placeholder(R.drawable.plus)
-                .resize(600,600)
-                .centerInside()
-                //.transform(new RoundedCornersTransformation(5, 0))
-                .into(holder.imageView);
-*/
-        holder.setImage(this.mContext, anime);
+        int max_stars = mContext.getResources().getInteger(R.integer.max_stars);
+        float adjusted_rating = (anime.getRating() / 10) * (max_stars);
+        holder.ratingBar.setRating(adjusted_rating);
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(holder.overflow);
+
             }
         });
 
+        Picasso.with(mContext)
+                .load(anime.getPoster())
+                .config(Bitmap.Config.RGB_565)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .resize(width, height)
+                .centerCrop()
+                .tag(mContext)
+                .into(holder.imageView,  new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.w(LOG_TAG, Thread.currentThread().getName());
+                        //Log.d(LOG_TAG, "Image loaded from cache");
+                    }
 
+                    @Override
+                    public void onError() {
+                        Log.w(LOG_TAG, Thread.currentThread().getName());
+                        //Log.d(LOG_TAG, "Trying again in ONLINE mode, load from cache is failed");
+                        Picasso.with(mContext)
+                                .load(anime.getPoster())
+                                .resize(width, height)
+                                .tag(mContext)
+                                .config(Bitmap.Config.RGB_565)
+                                .centerCrop()
+                                .into(holder.imageView);
+                    }
+                });
     }
 
     /**
@@ -101,6 +128,9 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
         this.mAnimeList.addAll(animeList);
         // The adapter needs to know that the data has changed. If we don't call this, app will crash.
         notifyItemRangeInserted(count, animeList.size());
+        PreFetchImageTask preFetchImageTask = new PreFetchImageTask();
+        preFetchImageTask.execute(animeList);
+
     }
 
     /**
@@ -123,4 +153,26 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
         }
     }
 
+    public class PreFetchImageTask extends AsyncTask<List<Anime>, Void, Void> {
+
+        private final String LOG_TAG = AnimeAdapter.PreFetchImageTask.class.getSimpleName();
+
+        @Override
+        protected Void doInBackground(final List<Anime>... animeList) {
+            Log.d(LOG_TAG,"Pre fetching images");
+            if (animeList[0] == null)
+                return null;
+            final int size = animeList[0].size();
+            for (int i = 0; i < size; i++) {
+                Anime anime = animeList[0].get(i);
+                Log.w(LOG_TAG, Thread.currentThread().getName());
+                Picasso.with(mContext)
+                        .load(anime.getPoster())
+                        .resize(width, height)
+                        .config(Bitmap.Config.RGB_565)
+                        .fetch();
+            }
+            return null;
+        }
+    }
 }

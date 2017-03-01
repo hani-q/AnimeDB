@@ -12,7 +12,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public ViewPagerAdapter(FragmentManager fm, Context ctxt) {
         super(fm);
         this.ctxt = ctxt;
-
     }
 
     @Override
@@ -32,6 +31,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         }
         return fragment;
     }
+
 
     @Override
     public int getCount() {

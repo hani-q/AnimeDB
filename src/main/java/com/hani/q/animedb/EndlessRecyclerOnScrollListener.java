@@ -1,8 +1,14 @@
 package com.hani.q.animedb;
 
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 /**
  * Created by hani Q on 2/22/2017.
@@ -17,12 +23,12 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     private int current_page = 1;
     GridLayoutManager mlayoutManager;
+    Context mContext;
 
     public EndlessRecyclerOnScrollListener(
-            GridLayoutManager gridLayoutManager) {
+            GridLayoutManager gridLayoutManager, Context context) {
         this.mlayoutManager = gridLayoutManager;
-
-
+        this.mContext = context;
     }
 
     @Override

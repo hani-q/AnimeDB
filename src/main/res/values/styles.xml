@@ -10,6 +10,12 @@
 
     </style>
 
+    <style name="animeRatingBar"
+        parent="android:style/Widget.Material.RatingBar.Small">
+        <item name="android:minHeight">22dip</item>
+        <item name="android:maxHeight">22dip</item>
+    </style>
+
     <style name="MyButton">
         <item name="android:background">@color/primary</item>
         <item name="android:textColor">#FFFFFF</item>

@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -12,6 +11,9 @@ public class Anime implements Parcelable {
     public static final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w500";
 
     private String title;
+
+    @SerializedName("vote_average")
+    private String rating;
 
     @SerializedName("poster_path")
     private String poster;
@@ -24,7 +26,6 @@ public class Anime implements Parcelable {
 
     public Anime() {}
 
-
     public Anime(Parcel in) {
         this.title = in.readString();
         this.poster = in.readString();
@@ -32,6 +33,9 @@ public class Anime implements Parcelable {
         this.backdrop = in.readString();
     }
 
+    public float getRating() {
+        return  Float.parseFloat(this.rating);
+    }
     public String getTitle() {
         return title;
     }
@@ -40,9 +44,7 @@ public class Anime implements Parcelable {
         this.title = title;
     }
 
-    public String getPoster() {
-        return TMDB_IMAGE_PATH + poster;
-    }
+    public String getPoster() { return TMDB_IMAGE_PATH + poster; }
 
     public void setPoster(String poster) {
         this.poster = poster;
@@ -76,10 +78,8 @@ public class Anime implements Parcelable {
         out.writeString(getPoster());
         out.writeString(description);
         out.writeString(getBackdrop());
+        out.writeString(this.rating);
     }
-
-
-
 
     public static class AnimeResults {
         private List<Anime> results;

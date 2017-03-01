@@ -13,6 +13,8 @@ import android.view.MenuItem;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.Executors;
+
 public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -27,7 +29,11 @@ public class MainActivity extends AppCompatActivity {
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         //Set Picasso Global Settings
-        Picasso picasso = new Picasso.Builder(getApplicationContext()).build();
+        Picasso picasso = new Picasso.Builder(getApplicationContext())
+                //.memoryCache(new LruCache(74000))
+                .executor(Executors.newSingleThreadExecutor())
+                .build();
+
         picasso.setIndicatorsEnabled(true);
         picasso.setLoggingEnabled(true);
 
@@ -51,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.tab_viewpager);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
+        //viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(viewPagerAdapter);
 
         tab_layout = (TabLayout) findViewById(R.id.tabs);
