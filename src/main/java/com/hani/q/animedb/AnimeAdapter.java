@@ -72,27 +72,28 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
             }
         });
 
+        //
+
         Picasso.with(mContext)
                 .load(anime.getPoster())
                 .config(Bitmap.Config.RGB_565)
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .resize(width, height)
+                //.resize(width, height)
+                .resizeDimen(R.dimen.TMDB_poster_width, R.dimen.TMDB_poster_height)
                 .centerCrop()
                 .tag(mContext)
                 .into(holder.imageView,  new Callback() {
                     @Override
                     public void onSuccess() {
                         Log.w(LOG_TAG, Thread.currentThread().getName());
-                        //Log.d(LOG_TAG, "Image loaded from cache");
                     }
-
                     @Override
                     public void onError() {
                         Log.w(LOG_TAG, Thread.currentThread().getName());
-                        //Log.d(LOG_TAG, "Trying again in ONLINE mode, load from cache is failed");
                         Picasso.with(mContext)
                                 .load(anime.getPoster())
-                                .resize(width, height)
+                                //.resize(width, height)
+                                .resizeDimen(R.dimen.TMDB_poster_width, R.dimen.TMDB_poster_height)
                                 .tag(mContext)
                                 .config(Bitmap.Config.RGB_565)
                                 .centerCrop()
@@ -169,6 +170,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
                 Picasso.with(mContext)
                         .load(anime.getPoster())
                         .resize(width, height)
+                        .tag(mContext)
                         .config(Bitmap.Config.RGB_565)
                         .fetch();
             }

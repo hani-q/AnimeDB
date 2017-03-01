@@ -22,9 +22,6 @@ public  class AnimeViewHolder extends RecyclerView.ViewHolder {
 
     public AnimeViewHolder(View itemView) {
         super(itemView);
-
-
-
         this.imageView = (ImageView)itemView.findViewById(R.id.animeImageView);
         this.textView = (TextView) itemView.findViewById(R.id.animeTextView);
         this.overflow = (ImageView) itemView.findViewById(R.id.overflow);

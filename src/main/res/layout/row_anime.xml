@@ -24,11 +24,12 @@
 
             <ImageView
                 android:id="@+id/animeImageView"
-                android:layout_width="500px"
-                android:layout_height="750px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:adjustViewBounds="true" />
 
             <!--TODO(HaniQ) Add to color file-->
