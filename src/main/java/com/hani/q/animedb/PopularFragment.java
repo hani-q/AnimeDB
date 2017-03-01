@@ -46,11 +46,12 @@ public class PopularFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private AnimeAdapter mAdapter;
-    private int page;
+    private int page = 1;
     private static String LOG_TAG = PopularFragment.class.getSimpleName();
 
     public PopularFragment() {
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +72,10 @@ public class PopularFragment extends Fragment {
                 startActivity(detailIntent);
             }
         });
-        page = 1;
         mRecyclerView.setAdapter(mAdapter);
+
+        page = 1;
+
         FetchDataTask dataTask = new FetchDataTask();
         dataTask.execute(String.valueOf(page));
         page++;
@@ -89,7 +92,8 @@ public class PopularFragment extends Fragment {
             @Override
             public void onLoadMore(int current_page) {
                 FetchDataTask dataTask = new FetchDataTask();
-                dataTask.execute(String.valueOf(++page));
+                dataTask.execute(String.valueOf(page));
+                page++;
             }
 
             @Override
@@ -115,6 +119,8 @@ public class PopularFragment extends Fragment {
         });
         return view;
     }
+
+
 
     public class FetchDataTask extends AsyncTask<String, Void, Void> {
 
@@ -142,7 +148,6 @@ public class PopularFragment extends Fragment {
             service.getPopularMovies(new Callback<Anime.AnimeResults>() {
                 @Override
                 public void success(Anime.AnimeResults animeResult, Response response) {
-                    Log.w(LOG_TAG, Thread.currentThread().getName());
                     mAdapter.setAnimeList(animeResult.getResults());
                 }
 

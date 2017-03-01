@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
                 .executor(Executors.newSingleThreadExecutor())
                 .build();
 
-        picasso.setIndicatorsEnabled(true);
-        picasso.setLoggingEnabled(true);
+        //picasso.setIndicatorsEnabled(true);
+        //picasso.setLoggingEnabled(true);
 
         // set the global instance to use this Picasso object
         // all following Picasso (with Picasso.with(Context context) requests will use this Picasso object

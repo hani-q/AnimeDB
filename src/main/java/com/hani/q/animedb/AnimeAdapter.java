@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.squareup.picasso.NetworkPolicy;
@@ -19,6 +20,11 @@ import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import static java.lang.Math.*;
 
@@ -32,7 +38,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
     private LayoutInflater mInflater;
     private Context mContext;
     private AnimeItemClickListener listener;
-    int width, height;
+    private int width, height;
 
     public AnimeAdapter (Context mContext, AnimeItemClickListener listener) {
 
@@ -42,12 +48,15 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
         this.listener = listener;
         this.width = (int) round(mContext.getResources().getInteger(R.integer.TMDB_poster_width) * (0.65));
         this.height = (int) round(mContext.getResources().getInteger(R.integer.TMDB_poster_height) * (0.65));
+
     }
 
     @Override
     public AnimeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.row_anime, parent, false);
         final AnimeViewHolder viewHolder = new AnimeViewHolder(view);
+
+
         view.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,8 +81,6 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
             }
         });
 
-        //
-
         Picasso.with(mContext)
                 .load(anime.getPoster())
                 .config(Bitmap.Config.RGB_565)
@@ -85,11 +92,9 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
                 .into(holder.imageView,  new Callback() {
                     @Override
                     public void onSuccess() {
-                        Log.w(LOG_TAG, Thread.currentThread().getName());
                     }
                     @Override
                     public void onError() {
-                        Log.w(LOG_TAG, Thread.currentThread().getName());
                         Picasso.with(mContext)
                                 .load(anime.getPoster())
                                 //.resize(width, height)
@@ -166,7 +171,6 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
             final int size = animeList[0].size();
             for (int i = 0; i < size; i++) {
                 Anime anime = animeList[0].get(i);
-                Log.w(LOG_TAG, Thread.currentThread().getName());
                 Picasso.with(mContext)
                         .load(anime.getPoster())
                         .resize(width, height)
@@ -177,4 +181,46 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
             return null;
         }
     }
+
+//    public class FetchDataTask extends AsyncTask<String, Void, Void> {
+//
+//        private final String LOG_TAG = PopularFragment.FetchDataTask.class.getSimpleName();
+//
+//        @Override
+//        protected Void doInBackground(final String... params) {
+//            if (params[0] == null || params[1] == null || params[2] == null)
+//                return null;
+//            final String page = params[0];
+//            final String url = params[1];
+//            final String key = params[2];
+//
+//            Log.d(LOG_TAG, String.format("Loading Page: %s", page));
+//            RestAdapter restAdapter = new RestAdapter.Builder()
+//                    .setEndpoint(url)
+//                    .setRequestInterceptor(new RequestInterceptor() {
+//                        @Override
+//                        public void intercept(RequestFacade request) {
+//                            request.addEncodedQueryParam("api_key", key);
+//                            request.addEncodedQueryParam("include_adult", "false");
+//                            request.addEncodedQueryParam("page", page);
+//                        }
+//                    })
+//                    .setLogLevel(RestAdapter.LogLevel.BASIC)
+//                    .build();
+//
+//            MovieApiService service = restAdapter.create(MovieApiService.class);
+//            service.getPopularMovies(new retrofit.Callback<Anime.AnimeResults>() {
+//                @Override
+//                public void success(Anime.AnimeResults animeResult, Response response) {
+//                    setAnimeList(animeResult.getResults());
+//                }
+//
+//                @Override
+//                public void failure(RetrofitError error) {
+//                    error.printStackTrace();
+//                }
+//            });
+//            return null;
+//        }
+//    }
 }

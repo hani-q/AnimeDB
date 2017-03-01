@@ -27,7 +27,4 @@ public  class AnimeViewHolder extends RecyclerView.ViewHolder {
         this.overflow = (ImageView) itemView.findViewById(R.id.overflow);
         this.ratingBar = (RatingBar) itemView.findViewById(R.id.rating);
     }
-
-
-
 }
