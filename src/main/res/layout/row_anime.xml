@@ -23,33 +23,29 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/animeImageView"
+                android:id="@+id/posterImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true" />
 
-            <!--TODO(HaniQ) Add to color file-->
             <TextView
-                android:id="@+id/animeTextView"
+                android:id="@+id/posterTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/animeImageView"
+                android:layout_below="@id/posterImageView"
                 android:textSize="@dimen/album_title"
                 android:layout_marginEnd="10dp"
                 android:textColor="#ffff"
                 android:layout_centerInParent="true"/>
 
-            <!--style="@style/ratingBar"-->
-
             <RatingBar
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/animeTextView"
+                android:layout_below="@id/posterTextView"
                 android:numStars="@integer/max_stars"
                 android:gravity="center"
                 android:isIndicator="true"
@@ -62,12 +58,19 @@
                 android:layout_width="@dimen/ic_album_overflow_width"
                 android:layout_height="@dimen/ic_album_overflow_height"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/animeImageView"
+                android:layout_below="@id/posterImageView"
                 android:layout_marginEnd="@dimen/ic_album_overflow_margin_right"
                 android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_dots" />
+
         </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/posterProgressBar"
+            android:layout_height="770px"
+            android:layout_width="500px"
+            android:layout_gravity="center" />
 
     </android.support.v7.widget.CardView>
 
