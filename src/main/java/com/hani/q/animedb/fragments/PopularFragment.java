@@ -3,24 +3,35 @@ package com.hani.q.animedb.fragments;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.hani.q.animedb.BuildConfig;
+import com.hani.q.animedb.activities.MainActivity;
+import com.hani.q.animedb.interfaces.PopularService;
 import com.hani.q.animedb.models.Anime;
 import com.hani.q.animedb.adapters.AnimeAdapter;
 import com.hani.q.animedb.listeners.AnimeItemClickListener;
 import com.hani.q.animedb.activities.DetailActivity;
 import com.hani.q.animedb.listeners.EndlessRecyclerOnScrollListener;
-import com.hani.q.animedb.interfaces.MovieApiService;
 import com.hani.q.animedb.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.concurrent.Executor;
 
 import retrofit.Callback;
 import retrofit.RequestInterceptor;
@@ -42,6 +53,12 @@ public class PopularFragment extends Fragment {
     private AnimeAdapter mAdapter;
     private int page = 1;
     private static String LOG_TAG = PopularFragment.class.getSimpleName();
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private static String api_key;
+
+    // Remote Config keys
+    private static final String API_KEY = "tmdb_api_key";
+
 
     public PopularFragment() {
     }
@@ -58,6 +75,53 @@ public class PopularFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.setHasFixedSize(true);
+
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+
+        // Create a Remote Config Setting to enable developer mode, which you can use to increase
+        // the number of fetches available per hour during development. See Best Practices in the
+        // README for more information.
+        // [START enable_dev_mode]
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettings(configSettings);
+        // [END enable_dev_mode]
+
+        long cacheExpiration = 3600; // 1 hour in seconds.
+        // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
+        // retrieve values from the service.
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+
+        api_key = mFirebaseRemoteConfig.getString(API_KEY);
+
+
+
+        // [START fetch_config_with_callback]
+        // cacheExpirationSeconds is set to cacheExpiration here, indicating the next fetch request
+        // will use fetch data from the Remote Config service, rather than cached parameter values,
+        // if cached parameter values are more than cacheExpiration seconds old.
+        // See Best Practices in the README for more information.
+        mFirebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Fetch Succeeded",
+                                    Toast.LENGTH_SHORT).show();
+
+                            // After config data is successfully fetched, it must be activated before newly fetched
+                            // values are returned.
+                            mFirebaseRemoteConfig.activateFetched();
+                        } else {
+                            Toast.makeText(getContext(), "Fetch Failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        // [END fetch_config_with_callback]
 
         mAdapter = new AnimeAdapter(getContext(), new AnimeItemClickListener() {
             @Override
@@ -133,7 +197,7 @@ public class PopularFragment extends Fragment {
                     .setRequestInterceptor(new RequestInterceptor() {
                         @Override
                         public void intercept(RequestFacade request) {
-                            request.addEncodedQueryParam("api_key", getString(R.string.APIKey));
+                            request.addEncodedQueryParam("api_key", api_key);
                             request.addEncodedQueryParam("include_adult", "false");
                             request.addEncodedQueryParam("page", pages[0]);
                         }
@@ -141,8 +205,8 @@ public class PopularFragment extends Fragment {
                     .setLogLevel(RestAdapter.LogLevel.BASIC)
                     .build();
 
-            MovieApiService service = restAdapter.create(MovieApiService.class);
-            service.getPopularMovies(new Callback<Anime.AnimeResults>() {
+            PopularService service = restAdapter.create(PopularService.class);
+            service.getPopularAnime(new Callback<Anime.AnimeResults>() {
                 @Override
                 public void success(Anime.AnimeResults animeResult, Response response) {
                     mAdapter.setAnimeList(animeResult.getResults());

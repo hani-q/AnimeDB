@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.hani.q.animedb.BuildConfig;
 import com.hani.q.animedb.R;
 import com.hani.q.animedb.adapters.ViewPagerAdapter;
 import com.squareup.picasso.Picasso;
@@ -27,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static String LOG_TAG = MainActivity.class.getSimpleName();
 
+
+
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-
 
         //Set Picasso Global Settings
         Picasso picasso = new Picasso.Builder(getApplicationContext())
@@ -77,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         //FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.hide();
+
     }
 
 

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "821466216645",
+    "firebase_url": "https://anime-db-bab96.firebaseio.com",
+    "project_id": "anime-db-bab96",
+    "storage_bucket": "anime-db-bab96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821466216645:android:a38b3a01559afe0d",
+        "android_client_info": {
+          "package_name": "com.hani.q.animedb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "821466216645-9jpf0uhtp7a0j2rb3ce9nako01b0c8q0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hani.q.animedb",
+            "certificate_hash": "446026588fe7c938cc75b03facf1b61f4e2830fa"
+          }
+        },
+        {
+          "client_id": "821466216645-hs9ldmi7tnk870ks63clh8jvkis1jp7b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDifba0m4Vn8SZAXnBLXroZSbodJ5Same4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "821466216645-hs9ldmi7tnk870ks63clh8jvkis1jp7b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -250,7 +250,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
 //                    .setLogLevel(RestAdapter.LogLevel.BASIC)
 //                    .build();
 //
-//            MovieApiService service = restAdapter.create(MovieApiService.class);
+//            PopularService service = restAdapter.create(PopularService.class);
 //            service.getPopularMovies(new retrofit.Callback<Anime.AnimeResults>() {
 //                @Override
 //                public void success(Anime.AnimeResults animeResult, Response response) {
