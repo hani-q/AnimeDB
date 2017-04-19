@@ -12,12 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.hani.q.animedb.BuildConfig;
 import com.hani.q.animedb.R;
 import com.hani.q.animedb.adapters.ViewPagerAdapter;
 import com.squareup.picasso.Picasso;
+
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {

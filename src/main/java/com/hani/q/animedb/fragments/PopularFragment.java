@@ -76,6 +76,22 @@ public class PopularFragment extends Fragment {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.setHasFixedSize(true);
 
+
+        mAdapter = new AnimeAdapter(getContext(), new AnimeItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Anime anime = mAdapter.getItem(position);
+                Log.d(LOG_TAG, "clicked position:" + position);
+                Intent detailIntent = new Intent(getContext(), DetailActivity.class);
+                detailIntent.putExtra("Anime", anime);
+                startActivity(detailIntent);
+            }
+        });
+        mRecyclerView.setAdapter(mAdapter);
+
+        page = 1;
+
+
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         // Create a Remote Config Setting to enable developer mode, which you can use to increase
@@ -95,8 +111,6 @@ public class PopularFragment extends Fragment {
             cacheExpiration = 0;
         }
 
-        api_key = mFirebaseRemoteConfig.getString(API_KEY);
-
 
 
         // [START fetch_config_with_callback]
@@ -112,6 +126,11 @@ public class PopularFragment extends Fragment {
                             Toast.makeText(getContext(), "Fetch Succeeded",
                                     Toast.LENGTH_SHORT).show();
 
+                            api_key = mFirebaseRemoteConfig.getString(API_KEY);
+                            FetchDataTask dataTask = new FetchDataTask();
+                            dataTask.execute(String.valueOf(page));
+                            page++;
+
                             // After config data is successfully fetched, it must be activated before newly fetched
                             // values are returned.
                             mFirebaseRemoteConfig.activateFetched();
@@ -123,23 +142,7 @@ public class PopularFragment extends Fragment {
                 });
         // [END fetch_config_with_callback]
 
-        mAdapter = new AnimeAdapter(getContext(), new AnimeItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Anime anime = mAdapter.getItem(position);
-                Log.d(LOG_TAG, "clicked position:" + position);
-                Intent detailIntent = new Intent(getContext(), DetailActivity.class);
-                detailIntent.putExtra("Anime", anime);
-                startActivity(detailIntent);
-            }
-        });
-        mRecyclerView.setAdapter(mAdapter);
 
-        page = 1;
-
-        FetchDataTask dataTask = new FetchDataTask();
-        dataTask.execute(String.valueOf(page));
-        page++;
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
