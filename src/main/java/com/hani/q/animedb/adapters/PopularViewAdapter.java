@@ -24,22 +24,25 @@ import com.squareup.picasso.Callback;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static java.lang.Math.*;
 
 /**
- * TODO(HaniQ): Adding a darn desctription
+ * TODO(HaniQ): Add a darn description
  */
 
-public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
-    private static final String LOG_TAG = AnimeViewHolder.class.getSimpleName();
+public class PopularViewAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
+
     private List<Anime> mAnimeList;
     private LayoutInflater mInflater;
     private Context mContext;
     private AnimeItemClickListener listener;
     private int width, height;
 
-    public AnimeAdapter (Context mContext, AnimeItemClickListener listener) {
+    public PopularViewAdapter(Context mContext, AnimeItemClickListener listener) {
 
+        Timber.tag(PopularViewAdapter.class.getName());
         this.mContext = mContext;
         this.mInflater = LayoutInflater.from(this.mContext);
         this.mAnimeList = new ArrayList<>();
@@ -49,12 +52,11 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
     }
 
 
+
     @Override
     public AnimeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.row_anime, parent, false);
+        View view = mInflater.inflate(R.layout.anime_card, parent, false);
         final AnimeViewHolder viewHolder = new AnimeViewHolder(view);
-        viewHolder.textView.setVisibility(View.INVISIBLE);
-        viewHolder.ratingBar.setVisibility(View.INVISIBLE);
 
         view.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -64,31 +66,6 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
         });
         return viewHolder;
     }
-
-
-    @Override
-    public void onViewAttachedToWindow(AnimeViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        if (holder.imageView.getDrawable() == null)
-            holder.progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(AnimeViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
-        if (holder.imageView.getDrawable() == null)
-            holder.progressBar.setVisibility(View.VISIBLE);
-
-    }
-
-    @Override
-    public void onViewRecycled(AnimeViewHolder holder) {
-        super.onViewRecycled(holder);
-        if (holder.imageView.getDrawable() == null)
-            holder.progressBar.setVisibility(View.VISIBLE);
-
-    }
-
 
     private void setHolderItems(final AnimeViewHolder holder, final Anime anime) {
         holder.textView.setText(anime.getTitle());
@@ -102,25 +79,25 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
 
             }
         });
-        holder.progressBar.setVisibility(View.INVISIBLE);
-        holder.textView.setVisibility(View.VISIBLE);
-        holder.ratingBar.setVisibility(View.VISIBLE);
-        holder.overflow.setVisibility(View.VISIBLE);
     }
+
     @Override
     public void onBindViewHolder(final AnimeViewHolder holder, int position) {
-        holder.textView.setVisibility(View.INVISIBLE);
-        holder.ratingBar.setVisibility(View.INVISIBLE);
-        holder.overflow.setVisibility(View.INVISIBLE);
+
+        //Clear text and rating. View might be recycled
+        holder.textView.setText("");
+        holder.ratingBar.setRating(0);
+
         final Anime anime = mAnimeList.get(position);
 
 
         Picasso.with(mContext)
-                .load(anime.getPoster())
+                .load(anime.getPoster_path())
                 //Should be already fetched
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .resizeDimen(R.dimen.TMDB_poster_width, R.dimen.TMDB_poster_height)
                 .centerCrop()
+                .placeholder(R.drawable.placeholder)
                 .tag(mContext)
                 .into(holder.imageView,  new Callback() {
                     @Override
@@ -130,7 +107,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
                     @Override
                     public void onError() {
                         Picasso.with(mContext)
-                                .load(anime.getPoster())
+                                .load(anime.getPoster_path())
                                 .resizeDimen(R.dimen.TMDB_poster_width, R.dimen.TMDB_poster_height)
                                 .tag(mContext)
                                 .centerCrop()
@@ -172,13 +149,15 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
     }
 
     public void setAnimeList(List<Anime> animeList) {
-        //this.mAnimeList.clear();
-        int count = getItemCount();
-        this.mAnimeList.addAll(animeList);
+        this.mAnimeList.clear();
+        //int count = getItemCount();
+        //this.mAnimeList.addAll(animeList);
+        this.mAnimeList = animeList;
         // The adapter needs to know that the data has changed. If we don't call this, app will crash.
-        notifyItemRangeInserted(count, animeList.size());
-        PreFetchThumbnailTask preFetchThumbnailTask = new PreFetchThumbnailTask();
-        preFetchThumbnailTask.execute(animeList);
+        //notifyItemRangeInserted(count, animeList.size());
+        notifyDataSetChanged();
+//        PreFetchThumbnailTask preFetchThumbnailTask = new PreFetchThumbnailTask();
+//        preFetchThumbnailTask.execute(animeList.subList(0, 30));
 
     }
 
@@ -215,7 +194,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
             for (int i = 0; i < size; i++) {
                 Anime anime = animeList[0].get(i);
                 Picasso.with(mContext)
-                        .load(anime.getPoster())
+                        .load(anime.getPoster_path())
                         .resize(width, height)
                         .tag(mContext)
                         .fetch();

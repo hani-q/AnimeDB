@@ -13,7 +13,6 @@ import com.hani.q.animedb.R;
 
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
-    public static String LOG_TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
     private int previousTotal = 0;
     private boolean loading = true;
     private int visibleThreshold = 5;

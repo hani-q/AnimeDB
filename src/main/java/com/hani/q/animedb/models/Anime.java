@@ -3,38 +3,33 @@ package com.hani.q.animedb.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Anime implements Parcelable {
+@IgnoreExtraProperties
+public class Anime {
     public static final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w500";
+    public static final String FALLBACK_IMAGE_PATH_PATH = "http://image.tmdb.org/t/p/w500";
 
-    private String title;
-
-    @SerializedName("vote_average")
-    private String rating;
-
-    @SerializedName("poster_path")
-    private String poster;
-
-    @SerializedName("overview")
-    private String description;
-
-    @SerializedName("backdrop_path")
-    private String backdrop;
+    public List<Integer> genre_ids;
+    public String original_language;
+    public  String original_title;
+    public Float popularity;
+    public String release_date;
+    public String title;
+    public int vote_count;
+    public int vote_average;
+    public String poster_path;
+    public String overview;
+    public String backdrop_path;
 
     public Anime() {}
 
-    public Anime(Parcel in) {
-        this.title = in.readString();
-        this.poster = in.readString();
-        this.description = in.readString();
-        this.backdrop = in.readString();
-    }
 
     public float getRating() {
-        return  Float.parseFloat(this.rating);
+        return  popularity;
     }
     public String getTitle() {
         return title;
@@ -44,41 +39,34 @@ public class Anime implements Parcelable {
         this.title = title;
     }
 
-    public String getPoster() { return TMDB_IMAGE_PATH + poster; }
-
-    public void setPoster(String poster) {
-        this.poster = poster;
+    public String getPoster_path() {
+        if (this.poster_path == null)
+            if (this.backdrop_path == null)
+                return FALLBACK_IMAGE_PATH_PATH;
+        return TMDB_IMAGE_PATH + this.poster_path;
     }
 
-    public String getDescription() {
-        return description;
+    public void setPoster_path(String poster_path) {
+        this.poster_path = poster_path;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getOverview() {
+        return overview;
     }
 
-    public String getBackdrop() {
-        return TMDB_IMAGE_PATH  + backdrop;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
-    public void setBackdrop(String backdrop) {
-        this.backdrop = backdrop;
+    public String getBackdrop_path() {
+        if (this.backdrop_path == null)
+             if (this.poster_path == null)
+                 return FALLBACK_IMAGE_PATH_PATH;
+        return TMDB_IMAGE_PATH  + this.backdrop_path;
     }
 
-    // 99.9% of the time you can just ignore this
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeString(title);
-        out.writeString(getPoster());
-        out.writeString(description);
-        out.writeString(getBackdrop());
-        out.writeString(this.rating);
+    public void setBackdrop_path(String backdrop_path) {
+        this.backdrop_path = backdrop_path;
     }
 
     public static class AnimeResults {

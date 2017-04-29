@@ -5,4 +5,5 @@
     <color name="colorPrimaryDark">#191919</color>
     <color name="colorAccent">#b2b2b2</color>
     <color name="colorShadow">#ca000000</color>
+    <color name="fabColor">#ffe100</color>
 </resources>

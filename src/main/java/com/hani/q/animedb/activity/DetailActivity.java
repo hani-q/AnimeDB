@@ -1,4 +1,4 @@
-package com.hani.q.animedb.activities;
+package com.hani.q.animedb.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

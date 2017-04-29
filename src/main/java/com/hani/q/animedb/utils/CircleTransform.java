@@ -1,4 +1,4 @@
-package com.hani.q.animedb.transformations;
+package com.hani.q.animedb.utils;
 
 /*
  * Copyright 2014 Julian Shen
