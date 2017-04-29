@@ -11,6 +11,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,5 +41,6 @@ dependencies {
     compile 'com.google.firebase:firebase-config:10.2.1'
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.google.firebase:firebase-database:10.2.1'
+    compile 'at.favre.lib:dali:0.3.4'
     testCompile 'junit:junit:4.12'
 }

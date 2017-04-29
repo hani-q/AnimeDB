@@ -54,8 +54,8 @@ public class PopularFragment extends Fragment {
     FloatingActionButton fab;
 
     private PopularViewAdapter mAdapter;
-    private Unbinder unbinder;
 
+    private Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +64,6 @@ public class PopularFragment extends Fragment {
         Timber.tag(PopularFragment.class.getSimpleName());
         View view = inflater.inflate(R.layout.fragment_popular, container, false);
         unbinder = ButterKnife.bind(this, view);
-
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.setHasFixedSize(true);
@@ -91,9 +90,7 @@ public class PopularFragment extends Fragment {
         });
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
-        final DatabaseReference myRef = database.getReference("v1/movies");
+        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("v1/movies");
         final List<Anime> mAnimeList = new ArrayList<Anime>();
 
         // Read from the database
@@ -110,6 +107,8 @@ public class PopularFragment extends Fragment {
                         Collections.reverse(mAnimeList);
                         mAdapter.setAnimeList(mAnimeList);
                         Timber.d("Total Movie Count is: " + dataSnapshot.getChildrenCount());
+                        
+                        myRef.goOffline();
                     }
 
                     @Override

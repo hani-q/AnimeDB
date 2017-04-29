@@ -7,10 +7,12 @@ package com.hani.q.animedb;
 import android.app.Application;
 import android.graphics.Bitmap;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.Executors;
 
+import at.favre.lib.dali.Dali;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
@@ -41,5 +43,9 @@ public class AnimeDbApplication extends Application {
 
         Timber.plant(new Timber.DebugTree());
         ButterKnife.setDebug(BuildConfig.DEBUG);
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        Dali.setDebugMode(BuildConfig.DEBUG);
     }
 }

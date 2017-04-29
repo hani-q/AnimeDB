@@ -156,8 +156,8 @@ public class PopularViewAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
         // The adapter needs to know that the data has changed. If we don't call this, app will crash.
         //notifyItemRangeInserted(count, animeList.size());
         notifyDataSetChanged();
-//        PreFetchThumbnailTask preFetchThumbnailTask = new PreFetchThumbnailTask();
-//        preFetchThumbnailTask.execute(animeList.subList(0, 30));
+        PreFetchThumbnailTask preFetchThumbnailTask = new PreFetchThumbnailTask();
+        preFetchThumbnailTask.execute(animeList.subList(0, 30));
 
     }
 

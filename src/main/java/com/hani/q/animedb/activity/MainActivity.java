@@ -1,5 +1,6 @@
 package com.hani.q.animedb.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -10,27 +11,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.hani.q.animedb.R;
 import com.hani.q.animedb.adapters.ViewPagerAdapter;
+import com.squareup.picasso.Picasso;
 
+import at.favre.lib.dali.Dali;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Nullable
     @BindView(R.id.anime_toolbar) Toolbar toolbar;
 
-    @Nullable
     @BindView(R.id.tabs) TabLayout tab_layout;
 
-    @Nullable
     @BindView(R.id.collapsing_container) CollapsingToolbarLayout collapsing_container;
 
-    @Nullable
     @BindView(R.id.tab_viewpager) ViewPager viewPager;
+
+    @BindView(R.id.backdrop)
+    ImageView backdrop;
 
     ViewPagerAdapter viewPagerAdapter;
 
@@ -40,8 +43,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
+        Picasso.with(this)
+                .load(R.drawable.gibli)
+                .into(backdrop);
+
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
-        //viewPager.setOffscreenPageLimit(3);
+
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(viewPagerAdapter);
 
         tab_layout.setupWithViewPager(viewPager);
